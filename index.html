@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>GeoTweet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <!-- <link href="css/style.css" rel="stylesheet"> -->
+        
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <script src="js/libs/jquery-1.7.1.js"></script>
+    <script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAtwIOrc72kO1ye2sAf79huLxyGKshv-5E&sensor=false">
+    </script>
+
+<script>
+$("document").ready(function(){
+
+var myLatlng = new google.maps.LatLng(42.3583,-71.0603);
+var myOptions = {
+  zoom: 4,
+  center: myLatlng,
+  mapTypeId: google.maps.MapTypeId.ROADMAP,
+}
+var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+});
+
+</script>
+
+  </head>
+
+  <body data-spy="scroll" data-target=".subnav" data-offset="50">
+
+  <!-- Navbar
+    ================================================== -->
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="./index.html">GeoTweet</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="">
+                <a href="./index.html">Overview</a>
+              </li>
+              <li class="">
+                <a href="./about.html">About</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <h2>Welcome</h2>
+        <p class="lead">Add directions here on how to use ...</p>
+        
+        <form><input type="text" name="query1" id="query" placeholder="Enter search term(s)"/><br/>
+        <image onclick="getTweets()" src="img/button.png"/>
+        </form>
+        
+
+       <div id="map_canvas" class="span12" style="height:420px;"></div><!-- /Map -->
+       <div id="tweets" class="span12">
+       <table class="table table-striped table-condensed">
+	       <thead>
+		       <tr>
+			       <th>Time</th>
+			       <th>Latitude</th>
+			       <th>Longitude</th>
+			       <th>Text</th>
+			    </tr>
+			</thead>
+		<tbody id="tbody">
+		</tbody>
+       </table>
+			       <!-- / Tweets GO HERE --> 
+			       
+       </div>  <!-- /Get Tweets -->     
+       
+          <div class="span12">
+          &nbsp; 
+          </div> <!-- /spacer -->
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script> 
+<script>
+function getTweets(){
+
+	/*Clear the table */
+	$("tbody[id=tbody]").text("")
+	
+	/* be sure to regexp and sanitize the search terms */
+	var terms = $("input:text[name=query1]").val()
+	/*var page = 1;*/
+	var data = $.getJSON("http://search.twitter.com/search.json?q="+terms+"?&callback=?&rpp=100", function(data){
+		 for (var i = 0; i < data.results.length; i++) {
+        console.log(data.results[i]);
+        if (data.results[i].geo){
+        	var lat = data.results[i].geo.coordinates[0]
+        	var lon = data.results[i].geo.coordinates[1]
+        	var marker = new google.maps.Marker({
+    				position: new google.maps.LatLng(lat,lon),
+    				title: data.results[i].created_at
+					});
+
+					// To add the marker to the map, call setMap();
+					marker.setMap(map);
+        }
+        else{
+        	var lat = "null"
+        	var lon = "null"
+        }
+        $("tbody[id=tbody]").append("<tr><td>"+data.results[i].created_at+"</td><td>"+lat+"</td><td>"+lon+"</td><td>"+ data.results[i].text+"</td></tr>")
+      };
+	});
+
+
+}
+
+</script>
+
+
+
+    <script src="js/prettify.js"></script>
+    <script src="js/bootstrap-transition.js"></script>
+    <script src="js/bootstrap-alert.js"></script>
+    <script src="js/bootstrap-modal.js"></script>
+    <script src="js/bootstrap-dropdown.js"></script>
+    <script src="js/bootstrap-scrollspy.js"></script>
+    <script src="js/bootstrap-tab.js"></script>
+    <script src="js/bootstrap-tooltip.js"></script>
+    <script src="js/bootstrap-popover.js"></script>
+    <script src="js/bootstrap-button.js"></script>
+    <script src="js/bootstrap-collapse.js"></script>
+    <script src="js/bootstrap-carousel.js"></script>
+    <script src="js/bootstrap-typeahead.js"></script>
+    <script src="js/application.js"></script>
+
+
+  </body>
+</html>

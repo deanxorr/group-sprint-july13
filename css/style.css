@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * HTML5 Boilerplate
  *
@@ -291,3 +292,92 @@ td { vertical-align: top; }
   p, h2, h3 { orphans: 3; widows: 3; }
   h2, h3 { page-break-after: avoid; }
 }
+=======
+/* Body and structure
+-------------------------------------------------- */
+body {
+  position: relative;
+  padding-top: 20px;
+  background-color: #ffffff;
+  background-image: url(assets/img/ctodd_main.jpg);
+  background-repeat: repeat-x;
+  background-position: 0 40px;
+}
+
+
+/* Tweak navbar brand link to be super sleek
+-------------------------------------------------- */
+.navbar-fixed-top .brand {
+  padding-right: 0;
+  padding-left: 0;
+  margin-left: 20px;
+  float: right;
+  font-weight: bold;
+  color: #000;
+  text-shadow: 0 1px 0 rgba(255,255,255,.1), 0 0 30px rgba(255,255,255,.125);
+  -webkit-transition: all .2s linear;
+     -moz-transition: all .2s linear;
+          transition: all .2s linear;
+}
+.navbar-fixed-top .brand:hover {
+  text-decoration: none;
+}
+.get {
+    display:none;
+}
+ 
+#diagram {
+    float:left;
+    width:auto;
+    height:auto;
+}
+
+#tweet ul {
+	list-style: none;
+}
+
+.skills {
+float:left;
+clear:both;
+width:100%;
+}
+
+.skills ul,
+.skills li {
+display:block;
+list-style:none;
+margin:0;
+padding:0;
+}
+
+.skills li {
+float:right;
+clear:both;
+padding:0 15px;
+height:35px;
+line-height:35px;
+color:#fff;
+margin-bottom:1px;
+font-size:18px;
+}
+
+.skills .jq {
+background:#97BE0D;
+}
+
+.skills .css {
+background:#D84F5F;
+}
+
+.skills .html {
+background:#88B8E6;
+}
+
+.skills .php {
+background:#BEDBE9;
+}
+
+.skills .sql {
+background:#EDEBEE;
+}
+>>>>>>> Adding basic Bootstrap Files
