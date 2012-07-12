@@ -1,0 +1,61 @@
+<html>
+<head>
+<script src="js/libs/jquery-1.7.1.js"></script>
+<script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAtwIOrc72kO1ye2sAf79huLxyGKshv-5E&sensor=false">
+    </script>
+<script>
+$("document").ready(function(){
+
+});
+
+</script>
+</head>
+<body>
+<form>
+Enter your search term: <input type="text" name="query1" id="query" /><br />
+<image onclick="getTweets()" src="images/gt-logo.png"/>
+<span style="font-size:12;"><a href="http://www.flickr.com/photos/tonynetone/3717759677/sizes/m/in/photostream/">image source</a></span>
+</form>
+<div id="map_canvas" style="height:300px;"></div>
+<div id="tweets">
+</div>
+<script>
+function getTweets(){
+	/* be sure to regexp and sanitize the search terms */
+	var terms = $("input:text[name=query1]").val()
+	/*var page = 1;*/
+	var data = $.getJSON("http://search.twitter.com/search.json?q="+terms+"?&callback=?&rpp=100", function(data){
+		 for (var i = 0; i < data.results.length; i++) {
+        console.log(data.results[i]);
+        if (data.results[i].geo){
+        	var lat = data.results[i].geo.coordinates[0]
+        	var lon = data.results[i].geo.coordinates[1]
+        	var marker = new google.maps.Marker({
+    				position: new google.maps.LatLng(lat,lon),
+    				title: data.results[i].created_at
+					});
+
+					// To add the marker to the map, call setMap();
+					marker.setMap(map);
+        }
+        else{
+        	var lat = "null"
+        	var lon = "null"
+        }
+        $("div[id=tweets]").append("created at: "+data.results[i].created_at+", location: lat: "+lat+" lon: "+lon+", text: "+ data.results[i].text+"<br/>")
+      };
+	});
+
+
+}
+var myLatlng = new google.maps.LatLng(42.3583,-71.0603);
+var myOptions = {
+  zoom: 4,
+  center: myLatlng,
+  mapTypeId: google.maps.MapTypeId.ROADMAP,
+}
+var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+</script>
+</body>
+</html>
