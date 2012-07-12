@@ -1,0 +1,19 @@
+<html>
+<head>
+	<script src="js/libs/jquery-1.7.1.js"></script>
+</head>
+<script>
+
+function go(){
+	console.log("starting and creating request")
+	$.post('https://stream.twitter.com/1/statuses/filter.json',{track: 'learntodo'},function(data){
+  	console.log(data);
+  },'jsonp'
+  );
+	console.log('done?')
+}
+</script>
+<body>
+<div onclick="go()">CLICK ME TO GO</div>
+</body>
+</html>

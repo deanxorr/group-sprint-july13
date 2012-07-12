@@ -1,6 +1,7 @@
 <html>
 <head>
 <script src="js/libs/jquery-1.7.1.js"></script>
+<script src="http://d3js.org/d3.v2.js"></script>
 <script type="text/javascript"
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAtwIOrc72kO1ye2sAf79huLxyGKshv-5E&sensor=false">
     </script>
@@ -13,11 +14,11 @@ $("document").ready(function(){
 </head>
 <body>
 <form>
-Enter your search term: <input type="text" name="query1" id="query" /><br />
-<image onclick="getTweets()" src="images/gt-logo.png"/>
+Enter your search term: <input type="text" name="query1" id="query" />
+<image onclick="getTweets()" src="images/gt-logo.png" style="width:200px;display:inline;"/>
 <span style="font-size:12;"><a href="http://www.flickr.com/photos/tonynetone/3717759677/sizes/m/in/photostream/">image source</a></span>
 </form>
-<div id="map_canvas" style="height:300px;"></div>
+<div id="map_canvas" style="height:500px;"></div>
 <div id="tweets">
 </div>
 <script>
@@ -25,7 +26,10 @@ function getTweets(){
 	/* be sure to regexp and sanitize the search terms */
 	var terms = $("input:text[name=query1]").val()
 	/*var page = 1;*/
-	var data = $.getJSON("http://search.twitter.com/search.json?q="+terms+"?&callback=?&rpp=100", function(data){
+	var beaches =[
+	['Boston',]
+	]
+	var data = $.getJSON("http://search.twitter.com/search.json?q="+terms+"?&geocode=42.3583,-71.0603,1mi?&callback=?&rpp=100", function(data){
 		 for (var i = 0; i < data.results.length; i++) {
         console.log(data.results[i]);
         if (data.results[i].geo){
@@ -56,6 +60,26 @@ var myOptions = {
   mapTypeId: google.maps.MapTypeId.ROADMAP,
 }
 var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+/*var layer = new google.maps.FusionTablesLayer({
+  query: {
+    select: 'Geocodable address',
+    from: '0IMZAFCwR-t7jZnVzaW9udGFibGVzOjIxMDIxNw'
+  },
+  styles: [{
+  polygonOptions: {
+    fillColor: "#FFFFFF",
+    fillOpacity: ".2",
+    strokeColor: "#000000",
+    strokeWeight: "1"
+  }},
+  {where: "value<300",
+  polygonOptions: {
+  fillColor: "#0000FF"
+	},
+	}]
+});*/
+var layer = new google.maps.CloudLayer()
+layer.setMap(map);
 </script>
 </body>
 </html>
