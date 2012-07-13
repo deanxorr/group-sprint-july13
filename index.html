@@ -28,13 +28,6 @@
 <script>
 $("document").ready(function(){
 
-var myLatlng = new google.maps.LatLng(42.3583,-71.0603);
-var myOptions = {
-  zoom: 4,
-  center: myLatlng,
-  mapTypeId: google.maps.MapTypeId.ROADMAP,
-}
-var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
 });
 
@@ -74,8 +67,11 @@ var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
       <h2>Welcome</h2>
         <p class="lead">Add directions here on how to use ...</p>
         
-        <form><input type="text" name="query1" id="query" placeholder="Enter search term(s)"/><br/>
-        <image onclick="getTweets()" src="img/button.png"/>
+        <form><input type="text" name="query1" id="query" placeholder="Enter search term(s)"/>
+        <input type="radio" name="mood" value=":)">&nbsp Happy :)&nbsp
+        <input type="radio" name="mood" value=":(" >&nbsp Unhappy :(<br/>
+        <image onclick="getTweets()" src="img/button.png"/><br/>
+        <image onclick="drawCircle()" src="img/button.png"/>
         </form>
         
 
@@ -108,44 +104,140 @@ var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
     <!-- Placed at the end of the document so the pages load faster -->
     <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script> 
 <script>
+
+var myLatlng = new google.maps.LatLng(42.3583,-71.0603);
+var myOptions = {
+  zoom: 4,
+  center: myLatlng,
+  mapTypeId: google.maps.MapTypeId.ROADMAP,
+}
+var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+function drawCircle(lat,lon,radius){
+  var circle = new google.maps.Circle();
+  circle.setCenter(new google.maps.LatLng(lat,lon));
+  circle.setRadius(radius*1600);
+  circle.setMap(map);
+  circle.setOptions({strokeWeight:0, fillColor:"#21D04D", fillOpacity:.45});
+}
+
+
 function getTweets(){
 
 	/*Clear the table */
 	$("tbody[id=tbody]").text("")
-	
+	var mood = $("input:radio[name=mood]:checked").val()
+  console.log(mood)
 	/* be sure to regexp and sanitize the search terms */
 	var terms = $("input:text[name=query1]").val()
-	/*var page = 1;*/
-	var data = $.getJSON("http://search.twitter.com/search.json?q="+terms+"?&callback=?&rpp=100", function(data){
-		 for (var i = 0; i < data.results.length; i++) {
-        console.log(data.results[i]);
-        if (data.results[i].geo){
-        	var lat = data.results[i].geo.coordinates[0]
-        	var lon = data.results[i].geo.coordinates[1]
-        	var marker = new google.maps.Marker({
-    				position: new google.maps.LatLng(lat,lon),
-    				title: data.results[i].created_at
-					});
+	/*var page = 1; */
+  /*var latlon = [[39.783250, -89.650373, "Springfield, IL"],[39.790942, -86.147685, "Indianapolis, IN"],[42.2352,-71.0275,"Boston, MA"],[41.82355, -71.422132, "Providence, RI"]]*/
+  var latlon = [[
+  32.361538, -86.279118, "Montgomery,AL"],
+  [58.301935, -134.419740, "Juneau, AK"],
+  [33.448457, -112.073844, "Phoenix, AZ"],
+  [34.736009, -92.331122, "Little Rock, AR"],
+  [38.555605, -121.468926, "Sacramento, CA"],
+  [39.7391667, -104.984167, "Denver, CO"],
+  [41.767, -72.677, "Hartford, CT"],
+  [39.161921, -75.526755, "Dover, DE"],
+  [30.4518, -84.27277, "Tallahassee, FL"],
+  [33.76, -84.39, "Atlanta, GA"],
+  [21.30895, -157.826182, "Honolulu, HI"],
+  [43.613739, -116.237651, "Boise, ID"],
+  [39.783250, -89.650373, "Springfield, IL"],
+  [39.790942, -86.147685, "Indianapolis, IN"],
+  [41.590939, -93.620866, "Des Moines, IA"],
+  [39.04, -95.69, "Topeka, KS"],
+  [38.197274, -84.86311, "Frankfort, KY"],
+  [42.2352, -71.0275, "Boston, MA"],
+  [38.972945, -76.501157, "Annapolis, MD"],
+  [41.82355, -71.422132, "Providence, RI"],
+  [30.45809, -91.140229, "Baton Rouge, LA"],
+  [44.323535, -69.765261, "Augusta, ME"],
+  [42.7335, -84.5467, "Lansing, MI"],
+  [44.95, -93.094, "Saint Paul, MN"],
+  [32.320,  -90.207, "Jackson, MS"],
+  [38.572954, -92.189283, "Jefferson City, MO"],
+  [46.595805, -112.027031, "Helena, MT"],
+  [40.809868, -96.675345, "Lincoln, NE"],
+  [39.160949, -119.753877, "Carson City, NV"],
+  [43.220093, -71.549127, "Concord, NH"],
+  [40.221741, -74.756138, "Trenton, NJ"],
+  [35.667231, -105.964575, "Santa Fe, NM"],
+  [42.659829, -73.781339, "Albany, NY"],
+  [35.771, -78.638, "Raleigh, NC"],
+  [48.813343, -100.779004, "Bismarck, ND"],
+  [39.962245, -83.000647, "Columbus, OH"],
+  [35.482309, -97.534994, "Oklahoma City, OK"],
+  [44.931109, -123.029159, "Salem, OR"],
+  [40.269789, -76.875613, "Harrisburg, PA"],
+  [34.000, -81.035, "Columbia, SC"],
+  [44.367966, -100.336378, "Pierre, SD"],
+  [36.165, -86.784, "Nashville, TN"],
+  [30.266667, -97.75, "Austin, TX"],
+  [40.7547, -111.892622, "Salt Lake City, UT"],
+  [44.26639, -72.57194, "Montpelier, VT"],
+  [37.54, -77.46, "Richmond, VA"],
+  [47.042418, -122.893077, "Olympia, WA"],
+  [38.349497, -81.633294, "Charleston, WV"],
+  [43.074722, -89.384444, "Madison, WI"],
+  [41.145548, -104.802042, "Cheyenne, WY"]]
+  var query = "http://search.twitter.com/search.json?q="
+  for (var l = 0; l < latlon.length; l++){
+    var qlat = latlon[l][0]
+    var qlon = latlon[l][1]
+    query += terms + "%20"
+    if (mood){
+      query += mood + "?"
+    }
+    else{}
+    query += "&lat=" + qlat + "&lon=" + qlon
+    
+    /* close query */
+    query += "&callback=?&rpp=100&result_type=recent"
+    
+    /* function goes here */
+    queryTwitter(query, qlat, qlon)
 
-					// To add the marker to the map, call setMap();
-					marker.setMap(map);
-        }
-        else{
-        	var lat = "null"
-        	var lon = "null"
-        }
-        $("tbody[id=tbody]").append("<tr><td>"+data.results[i].created_at+"</td><td>"+lat+"</td><td>"+lon+"</td><td>"+ data.results[i].text+"</td></tr>")
-      };
-	});
+  }};
+      
+function queryTwitter(query, qlat, qlon){
+    $.getJSON(query, function(data){
+      var rad = .5*data.results.length
+      drawCircle(qlat,qlon,rad);
+      console.log("circle drawn "+qlat+" "+qlon+" "+rad)
+      for (var i = 0; i < data.results.length; i++) {
+          if (data.results[i].geo){
+            var lat = data.results[i].geo.coordinates[0]
+            var lon = data.results[i].geo.coordinates[1]
+            var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(lat,lon),
+              title: data.results[i].created_at
+            });
 
+            // To add the marker to the map, call setMap();
+            marker.setMap(map);
 
-}
+          }
+          else{
+            var lat = "null"
+            var lon = "null"
+          }
+          
+        
+          $("tbody[id=tbody]").append("<tr><td>"+data.results[i].created_at+"</td><td>"+lat+"</td><td>"+lon+"</td><td>"+ data.results[i].text+"</td></tr>")
+        };/* end internal for loop */
+    
+    
+    });
+} 
 
 </script>
 
 
 
-    <script src="js/prettify.js"></script>
+<!--    <script src="js/prettify.js"></script> -->
     <script src="js/bootstrap-transition.js"></script>
     <script src="js/bootstrap-alert.js"></script>
     <script src="js/bootstrap-modal.js"></script>
@@ -158,7 +250,7 @@ function getTweets(){
     <script src="js/bootstrap-collapse.js"></script>
     <script src="js/bootstrap-carousel.js"></script>
     <script src="js/bootstrap-typeahead.js"></script>
-    <script src="js/application.js"></script>
+<!--    <script src="js/application.js"></script> -->
 
 
   </body>
